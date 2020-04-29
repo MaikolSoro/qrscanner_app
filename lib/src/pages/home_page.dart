@@ -3,6 +3,7 @@ import 'package:qrscanner_app/src/pages/direcciones_page.dart';
 import 'package:qrscanner_app/src/pages/mapas_page.dart';
 
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrscanner_app/src/providers/db_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,21 +37,27 @@ class _HomePageState extends State<HomePage> {
        ),
     );
   }
+
   // metodo para scanner con la camara
   
   Future _scanQR() async {
 
-    String futureString = '';
+    String futureString = 'https://www.google.com';
     
-     try {
-      var result = await BarcodeScanner.scan();
-      setState(() => scanResult = result );
-      futureString = result.rawContent.toString();
+    //  try {
+    //   var result = await BarcodeScanner.scan();
+    //   setState(() => scanResult = result );
+    //   futureString = result.rawContent.toString();
       
-    } catch (e) {
-      print(e.toString());      
+    // } catch (e) {
+    //   print(e.toString());      
+    // }
+    // print(futureString);
+
+    if(futureString != null) {
+      final scan = ScanModel( valor: futureString );
+      DBProvider.db.nuevoScan(scan);
     }
-    print(futureString);
   }
 
   Widget _callPage(int paginaActual) {

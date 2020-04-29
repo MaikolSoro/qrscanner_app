@@ -1,8 +1,12 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:qrscanner_app/src/models/scan_model.dart';
+export 'package:qrscanner_app/src/models/scan_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+
+
+
 class DBProvider {
 
   static Database _dataBase;
@@ -110,8 +114,9 @@ class DBProvider {
     final res = await db.delete('Scans', where: 'id = ?', whereArgs: [id]);
     return res;
   }
- Future<int> deleteAll(int id ) async {
-    final db = await database;
+  Future<int> deleteAll() async {
+
+    final db  = await database;
     final res = await db.rawDelete('DELETE FROM Scans');
     return res;
   }
