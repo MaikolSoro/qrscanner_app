@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qrscanner_app/src/pages/direcciones_page.dart';
 import 'package:qrscanner_app/src/pages/mapas_page.dart';
 
+import 'package:barcode_scan/barcode_scan.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -10,6 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   int currentIndex = 0;
+  ScanResult scanResult;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,11 +30,27 @@ class _HomePageState extends State<HomePage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
        floatingActionButton: FloatingActionButton(
          child: Icon(Icons.filter_center_focus),
-         onPressed: (){},
+         onPressed: _scanQR,
          backgroundColor: Theme.of(context).primaryColor,
 
        ),
     );
+  }
+  // metodo para scanner con la camara
+  
+  Future _scanQR() async {
+
+    String futureString = '';
+    
+     try {
+      var result = await BarcodeScanner.scan();
+      setState(() => scanResult = result );
+      futureString = result.rawContent.toString();
+      
+    } catch (e) {
+      print(e.toString());      
+    }
+    print(futureString);
   }
 
   Widget _callPage(int paginaActual) {
