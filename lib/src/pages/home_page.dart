@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:qrscanner_app/src/bloc/scan_bloc.dart';
+import 'package:qrscanner_app/src/models/scan_model.dart';
 import 'package:qrscanner_app/src/pages/direcciones_page.dart';
 import 'package:qrscanner_app/src/pages/mapas_page.dart';
 
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:qrscanner_app/src/providers/db_provider.dart';
+
+
 
 class HomePage extends StatefulWidget {
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final scansBloc = new ScansBloc();
 
   int currentIndex = 0;
   ScanResult scanResult;
@@ -22,7 +28,7 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon:Icon(Icons.delete_forever),
-            onPressed: (){},
+            onPressed: scansBloc.borrarScanTODOS,
           )
         ],
       ),
@@ -56,7 +62,7 @@ class _HomePageState extends State<HomePage> {
 
     if(futureString != null) {
       final scan = ScanModel( valor: futureString );
-      DBProvider.db.nuevoScan(scan);
+      scansBloc.agregarScan(scan);
     }
   }
 
