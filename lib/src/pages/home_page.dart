@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:qrscanner_app/src/bloc/scan_bloc.dart';
 import 'package:qrscanner_app/src/models/scan_model.dart';
@@ -5,6 +7,7 @@ import 'package:qrscanner_app/src/pages/direcciones_page.dart';
 import 'package:qrscanner_app/src/pages/mapas_page.dart';
 
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrscanner_app/src/utils/utils.dart' as utils;
 
 
 
@@ -37,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
        floatingActionButton: FloatingActionButton(
          child: Icon(Icons.filter_center_focus),
-         onPressed: _scanQR,
+         onPressed: () =>  _scanQR(context),
          backgroundColor: Theme.of(context).primaryColor,
 
        ),
@@ -46,7 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   // metodo para scanner con la camara
   
-  Future _scanQR() async {
+  Future _scanQR(BuildContext context) async {
 
     String futureString = 'https://www.google.com';
     
@@ -63,8 +66,20 @@ class _HomePageState extends State<HomePage> {
     if(futureString != null) {
       final scan = ScanModel( valor: futureString );
       scansBloc.agregarScan(scan);
+
+      final scan2 = ScanModel( valor: 'geo:40.724233047051705,-74.00731459101564' );
+      scansBloc.agregarScan(scan2);
+
+    if (Platform.isIOS) {
+      Future.delayed(Duration( milliseconds: 750), () {
+        utils.abrirScan(context,scan);
+      });
+    } else {
+
+     utils.abrirScan(context,scan);
     }
   }
+}
 
   Widget _callPage(int paginaActual) {
 
